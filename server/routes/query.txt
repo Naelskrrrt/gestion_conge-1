@@ -1,0 +1,6 @@
+SELECT nom_employe, fonction_employe, num_phone,
+         utilisateur.user_email, date_debut, date_fin,
+          DATEDIFF(date_debut, date_fin) as duree, type_conger.type_conge_desc,
+          (DATEDIFF(date_debut, date_fin) - duree_normale) as reste_jour
+JOIN employer ON employer.id_employe = conger.id_employe
+JOIN type_conger ON type_conger.id_type_conge = conge.id_type_conge

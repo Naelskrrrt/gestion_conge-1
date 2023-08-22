@@ -5,20 +5,18 @@ import { getData, createElement, getDataByID, deleteData, updateData } from "../
 const router = express.Router()
 
 router.get('/', (async (req, res) => {
-    const getter = await getData('SELECT * FROM employer')
+    const getter = await getData('SELECT e1.id_employe,  e1.nom_employe AS nom_emp, e1.fonction_employe, e1.photo_employe, e1.prenom_employe, e2.nom_employe AS nom_sup FROM employee e1 LEFT JOIN employee e2 ON e1.id_employe = e2.id_sup_employe')
     res.send(getter)
 }))
 
 router.post('/', (async (req, res) => {
     try {
         const insertQuery = `INSERT INTO
-        employer (id_employe, nom_employe, prenom_employe, fonction_employe, num_phone, photo_employe, id_conger, id_type_utilisateur, id_sup_employe)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        employee (nom_employe, prenom_employe, fonction_employe, photo_employe, id_sup_employe)
+        VALUES (?, ?, ?, ?, ?)`
     
-        const tabProp = [req.body.id_employe, req.body.nom_employe
-                            , req.body.prenom_employe, req.body.fonction_employe
-                            , req.body.num_phone , req.body.photo_employe, req.body.id_conger
-                            , req.body.id_type_utilisateur, req.body.id_sup_employe]
+        const tabProp = [req.body.nom_employe, req.body.prenom_employe, req.body.fonction_employe, req.body.photo_employe, req.body.id_sup_employe]
+        console.log(tabProp)
     
         const setInTable = await createElement(insertQuery, tabProp)
         res.send(setInTable)
@@ -60,8 +58,8 @@ router.put('/:id', (async (req, res) => {
 router.delete('/:id', (async (req, res) => {
     try {
         const id = req.params.id
-        const deleteQuery = `DELETE FROM employer
-                                WHERE id_employer = ?;`
+        const deleteQuery = `DELETE FROM employee   
+                                WHERE id_employe = ?;`
         const tabProp = [id]
         const deleteEntity = await deleteData(deleteQuery, tabProp)
         res.send(deleteEntity)
@@ -73,7 +71,7 @@ router.delete('/:id', (async (req, res) => {
 // SEARCH BY ID
 router.get('/:id', (async (req, res) => {
     const id = req.params.id
-    const user = await getDataByID('employer', id , 'id_employer')
+    const user = await getDataByID('employee', id , 'id_employe')
     res.send(user)
 }))
 

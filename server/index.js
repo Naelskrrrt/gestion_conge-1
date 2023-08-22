@@ -9,13 +9,17 @@ import employer from "./routes/employer.js"
 import conger from "./routes/conger.js"
 import solde_conger from "./routes/solde_conger.js"
 import type_conger from "./routes/type_conger.js"
+import login_history from "./routes/login_history.js"
 import cors from 'cors'
+import bodyParser from "body-parser"
 // import auth from "./routes/auth.js"
 
 
 
 const app = express()
 const port = 8080
+
+app.use(bodyParser.json({ limit: '10mb' }))
 app.use(cors())
 app.use(express.json())
 app.use('/utilisateur', utilisateur)
@@ -25,6 +29,7 @@ app.use('/employer', employer)
 app.use('/conger', conger)
 app.use('/solde_conger', solde_conger)
 app.use('/type_conger', type_conger)
+app.use('/history', login_history)
 // app.use('/auth', auth)
 
 
